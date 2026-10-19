@@ -1,0 +1,10 @@
+node_modules/
+test-results/
+playwright-report/
+allure-results/
+allure-report/
+reporting-labs/
+reporting-labs.history.json
+.playwright/
+.playwright-cli/
+.DS_Store
