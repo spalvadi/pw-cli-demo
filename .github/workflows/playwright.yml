@@ -40,6 +40,12 @@ jobs:
           path: reporting-labs/
           retention-days: 14
 
+      - name: Upload reportingLabs report for GitHub Pages
+        if: ${{ !cancelled() && github.ref == 'refs/heads/main' && github.event_name != 'pull_request' }}
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: reporting-labs/
+
       - name: Upload Allure report
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
@@ -56,3 +62,18 @@ jobs:
           path: test-results/
           retention-days: 7
           if-no-files-found: ignore
+
+  deploy-report:
+    needs: test
+    if: ${{ !cancelled() && github.ref == 'refs/heads/main' && github.event_name != 'pull_request' }}
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy reportingLabs report to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
